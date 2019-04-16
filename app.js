@@ -13,7 +13,8 @@ const calculateAge = function(req, res) {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static("./build"));
+
+app.use(express.static("build"));
 app.post("/age", calculateAge);
 
 module.exports = { app };
