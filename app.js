@@ -1,29 +1,49 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-const { updateVisitorsCount, getVisitorsCount } = require("./register");
+const mysql = require("mysql");
 
 const { AgeCalculator } = require("./ageCalculator");
 
 const ageCalculator = new AgeCalculator();
 
-const logRequest = function(req, res, next) {
-	console.log(req.url);
-	next();
+const connection = mysql.createConnection({
+	host: "localhost",
+	user: "root",
+	password: "My+DB+Account",
+	database: "register"
+});
+
+const select = `SELECT * FROM visitors`;
+const update = `UPDATE visitors SET count=(SELECT SUM(count + 1))`;
+
+const getVisitorsCount = function(req, res) {
+	let visitorsCount;
+	connection.query(select, (error, results, fields) => {
+		if (error) throw error;
+		visitorsCount = results[0].count;
+		res.send("" + visitorsCount);
+	});
 };
 
 const calculateAge = function(req, res) {
 	const birthDay = req.body;
 	res.send(ageCalculator.computeAge(birthDay));
-	updateVisitorsCount();
+	connection.query(update, (error, results, fields) => {
+		if (error) throw error;
+		console.log(results);
+	});
 };
 
-app.use(logRequest);
+const closeConnection = function(req, res) {
+	connection.end();
+};
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-app.use(express.static("build"));
 app.post("/age", calculateAge);
 app.get("/visitorsCount", getVisitorsCount);
+app.use(express.static("build"));
+app.use(closeConnection);
 
 module.exports = { app };
