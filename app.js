@@ -8,10 +8,10 @@ const { AgeCalculator } = require("./ageCalculator");
 const ageCalculator = new AgeCalculator();
 
 const connection = mysql.createConnection({
-	host: "localhost",
-	user: "root",
-	password: "My+DB+Account",
-	database: "register"
+	host: process.env.HOST_NAME,
+	user: process.env.USER_NAME,
+	password: process.env.DB_PWD,
+	database: process.env.DB_NAME
 });
 
 const select = `SELECT * FROM visitors`;
