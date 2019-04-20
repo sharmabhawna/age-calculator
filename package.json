@@ -4,7 +4,8 @@
 	"private": true,
 	"main": "index.js",
 	"scripts": {
-		"start": "nodemon server.js"
+		"heroku-prebuild": "cd age-calculator-frontend && npm install && cd ..", 
+		"start": "cd age-calculator-frontend && npm run build && cd .. && nodemon server.js"
 	},
 	"author": "",
 	"license": "ISC",
