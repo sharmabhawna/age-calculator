@@ -34,15 +34,10 @@ const calculateAge = function(req, res) {
 	});
 };
 
-const closeConnection = function(req, res) {
-	connection.end();
-};
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.post("/age", calculateAge);
 app.get("/visitorsCount", getVisitorsCount);
 app.use(express.static("age-calculator-frontend/build"));
-app.use(closeConnection);
 
 module.exports = { app };
