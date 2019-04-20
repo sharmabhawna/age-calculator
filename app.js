@@ -9,7 +9,7 @@ const ageCalculator = new AgeCalculator();
 const connection = mysql.createConnection({
 	user: process.env.USER_NAME,
 	host: process.env.HOST_NAME,
-	database: process.env.DB_NAME,
+	database: "age_calculator_db",
 	password: process.env.DB_PWD
 });
 
